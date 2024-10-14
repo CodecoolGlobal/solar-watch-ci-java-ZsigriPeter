@@ -4,7 +4,7 @@
 
 In Solar Watch users can select a date and a city and they get sunrise and sunset time results based on their input. Only registered loged in users can use the page's function.
 
-![img.png](screenshots/img.png)
+![img.png](screenshots/srcs4.JPG)
 
 ## Main features
 
@@ -38,7 +38,7 @@ To set up the project locally:
 - Register a new user: select the "Sign Up" tab and fill the required fields, then click Sign Up.
 - Then Go to "Sign In", use the username / password combination given by you in the previous step
 
-![srcs1.jpg](screenshots/srcs1.jpg)
+![srcs1.jpg](screenshots/srcs1.JPG)
 
 - After logging in you can access the main part of the page.
 
