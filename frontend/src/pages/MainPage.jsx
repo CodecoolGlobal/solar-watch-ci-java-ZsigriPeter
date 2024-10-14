@@ -1,8 +1,8 @@
-import {useEffect, useState} from "react";
+import { useState} from "react";
 import {useNavigate} from "react-router-dom";
+import "./MainPage.css"
 
 async function getSunsetSunRiseTime(date, city) {
-    console.log(date, city);
     return fetch(`/api/getBy?date=${date}&city=${city}`,
         {
             method: "GET",
@@ -14,20 +14,6 @@ async function getSunsetSunRiseTime(date, city) {
         }).then(res => res.json());
 }
 
-const fetchUserContext = (token) => {
-    return fetch("user/context",
-        {
-            method: "GET",
-            headers:
-                {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem("jwt")}`
-                }
-        }
-    ).then(res => res.json());
-}
-
-
 function MainPage() {
 
     const navigate = useNavigate();
@@ -36,24 +22,14 @@ function MainPage() {
     const [city, setCity] = useState("");
     const [data, setData] = useState("");
 
-    const [page, setPage] = useState("");
-    const [authorized, setAuthorized] = useState(false);
-
-    useEffect(() => {
-        fetchUserContext().then(resp => {
-            const roles = resp.authorities.map(authority => authority.authority);
-            if (roles.includes("ROLE_ADMIN")) setAuthorized(true);
-            else setAuthorized(false);
-        })
-    }, [])
-
     const onSubmit = (e) => {
         e.preventDefault();
         getSunsetSunRiseTime(dateInput, city).then(
             result => {
                 setData(result);
-                console.log(result);
-                console.log(data);
+                if(result.status === 401) {
+                    navigate("/login");
+                }
             }
         );
     };
@@ -66,31 +42,38 @@ function MainPage() {
                         <table>
                             <tbody>
                             <tr>
+                                <th>State</th>
+                                <th>Country</th>
                                 <th>City</th>
                                 <th>Date</th>
                                 <th>Sun Rise Time</th>
                                 <th>Sun Set Time</th>
                             </tr>
-                            <tr>
-                                <td>{data.city}</td>
-                                <td>{data.date}</td>
-                                <td>{data.sunrise}</td>
-                                <td>{data.sunset}</td>
-                            </tr>
+                            {data.map((city,index) => (
+                                <tr key={index}>
+                                    <td>{city.state}</td>
+                                    <td>{city.country}</td>
+                                    <td>{city.city}</td>
+                                    <td>{city.date}</td>
+                                    <td>{city.sunrise}</td>
+                                    <td>{city.sunset}</td>
+
+                                </tr>
+                            ))}
                             </tbody>
                         </table>
+                        <button onClick={()=>setData(null)}>Search New</button>
                     </div>
                 ) : (
-                    <div className="sign-up">
+                    <div className="form-div">
                         <form onSubmit={onSubmit}>
-                            <label htmlFor="date">Date</label><br/>
+                            <label htmlFor="date">Date:</label><br/>
                             <input name="date" id="date" type="date" value={dateInput}
                                    onChange={e => setDateInput(e.target.value)}/><br/>
-                            <label htmlFor="city">City</label><br/>
+                            <label htmlFor="city">City:</label><br/>
                             <input name="city" id="city" type="text" value={city}
                                    onChange={e => setCity(e.target.value)}/><br/>
-
-                            <button type="submit">Get Result</button>
+                            <button type="submit">Get Results</button>
                         </form>
                     </div>
                 )

@@ -13,8 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.time.LocalDate;
+import java.util.List;
 
 import org.slf4j.Logger;
 
@@ -37,7 +39,7 @@ public class SolarWatchService {
 
     //https://api.openweathermap.org/geo/1.0/direct?q=London&limit=5&appid=937163359d1cdc16980dea3b0bf2b93e
 
-    private City getFirstCityCoordinates(String cityName) throws IOException {
+    private List<City> getCitiesFromNameCoordinates(String cityName) throws IOException {
         String urlForLatLon = String.format("https://api.openweathermap.org/geo/1.0/direct?q=%s&limit=5&appid=%s", cityName, API_KEY);
 
         ResponseEntity<OpenGeocodingReport[]> response =
@@ -48,40 +50,62 @@ public class SolarWatchService {
 
         logger.info("Response from Open Weather Geo Lat,Lon API: {}", urlForLatLon);
         assert openGeocodingReports != null;
-        OpenGeocodingReport result = Arrays.stream(openGeocodingReports).toList().get(0);
-        System.out.println(result);
-        City city = new City(result.name(), result.lon(), result.lat(), result.country(), result.state());
-        cityRepository.save(city);
-        return Arrays.stream(openGeocodingReports).toList().isEmpty() ? null : city;
+        List<OpenGeocodingReport> result = Arrays.stream(openGeocodingReports).toList();
+
+        List<City> cityList = new ArrayList<>();
+        result.stream().forEach(city -> {
+            if (cityRepository.findByLatitudeAndLongitude(city.lat(), city.lon()).isEmpty()) {
+                City cityEntity = new City(city.name(), city.lon(), city.lat(), city.country(), city.state());
+                cityRepository.save(cityEntity);
+                cityList.add(cityEntity);
+            } else {
+                cityList.add(cityRepository.findByLatitudeAndLongitude(city.lat(), city.lon()).get());
+            }
+        });
+        return cityList;
     }
 
-    private SunRiseSet getCityReportFromAPI(String cityName, LocalDate date) {
+    private List<CityReport> getCityReportListFromCityNameAndDate(String cityName, LocalDate date) {
         try {
-            City city = getFirstCityCoordinates(cityName);
-//            System.out.println("Report GEO: ");
-//            System.out.println(openGeocodingReport);
-            String url = String.format("https://api.sunrise-sunset.org/json?lat=%s&lng=%s&date=%s", city != null ? city.getLatitude() : 0, city != null ? city.getLongitude() : 0, date);
-//            System.out.println(url);
-            SunsetReport response = restTemplate.getForObject(url, SunsetReport.class);
-            logger.info("Response from Sunrise-sunset API: {}", url);
-//            System.out.println("Report Sunrise-sunset API: ");
-//            System.out.println(response);
-            assert response != null;
-            //(String sunrise, String sunset, LocalDate date, String cityName, City city)
-            SunRiseSet result = new SunRiseSet(response.results().sunrise(), response.results().sunset(), date, cityName, city);
-            sunsetRepository.save(result);
-            return result;
+            List<City> cityList = getCitiesFromNameCoordinates(cityName);
+            List<CityReport> cityReportList = new ArrayList<>();
+            cityList.stream().forEach(city -> {
+                        SunRiseSet result = getSunriseSetFromAPIWithCityObject(city, date);
+                        cityReportList.add(result.getReport());
+                    }
+            );
+            return cityReportList;
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }
     }
 
-    public CityReport getCityReport(String cityName, LocalDate date) {
-        if (sunsetRepository.findByCityNameAndDate(cityName, date).isEmpty()) {
-            SunRiseSet sunRiseSet = getCityReportFromAPI(cityName, date);
-            return sunRiseSet.getReport();
+    private SunRiseSet getSunriseSetFromAPIWithCityObject(City city, LocalDate date) {
+        if (sunsetRepository.findByDateAndCityId(date, city.getId()).isEmpty()) {
+            String url = String.format("https://api.sunrise-sunset.org/json?lat=%s&lng=%s&date=%s", city.getLatitude(), city.getLongitude(), date);
+            SunsetReport response = restTemplate.getForObject(url, SunsetReport.class);
+            logger.info("Response from Sunrise-sunset API: {}", url);
+            assert response != null;
+            SunRiseSet result = new SunRiseSet(response.results().sunrise(), response.results().sunset(), date, city);
+            sunsetRepository.save(result);
+            return result;
         }
-        return sunsetRepository.findByCityNameAndDate(cityName, date).get().getReport();
+        return sunsetRepository.findByDateAndCityId(date, city.getId()).get();
+    }
+
+    public List<CityReport> getCityReport(String cityName, LocalDate date) {
+
+        List<City> cityList = cityRepository.findByNameContaining(cityName);
+        List<SunRiseSet> cityReportList = new ArrayList<>();
+        cityList.forEach(city -> sunsetRepository.findByDateAndCityId(date, city.getId())
+                .ifPresent(cityReportList::add));
+        if (cityList.isEmpty()) {
+            return getCityReportListFromCityNameAndDate(cityName, date);
+        } else if (cityList.size() != cityReportList.size()) {
+            List<SunRiseSet> cityReportListFromAPI = cityList.stream().map(city -> getSunriseSetFromAPIWithCityObject(city, date)).toList();
+            return cityReportListFromAPI.stream().map(SunRiseSet::getReport).toList();
+        }
+        return cityReportList.stream().map(SunRiseSet::getReport).toList();
     }
 
     public CityReport deleteCityReportById(long cityId) {

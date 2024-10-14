@@ -9,4 +9,6 @@ public record CityReport(
         String sunrise,
         String sunset,
         LocalDate date,
-        String city) { }
+        String city,
+        String country,
+        String state) { }

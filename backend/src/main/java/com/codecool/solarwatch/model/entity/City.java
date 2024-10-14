@@ -10,6 +10,7 @@ import java.util.List;
 @Entity
 public class City {
 
+    @Getter
     @Id
     @GeneratedValue
     private long id;
@@ -27,12 +28,22 @@ public class City {
     @OneToMany(mappedBy = "city")
     private List<SunRiseSet> sunriseSet;
 
-    public City(String name, double lon, double lat, String country, String state) {
+    public City(String name, double longitude, double latitude, String country, String state) {
+        this.name = name;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.country = country;
+        this.state = state;
     }
 
     public City() {}
 
     public SunRiseSet getSunriseSet(LocalDate date) {
         return sunriseSet.stream().filter(sunrise -> sunrise.getDate().equals(date)).findFirst().orElse(null);
+    }
+
+    @Override
+    public String toString() {
+        return "name: " + name + ", longitude: " + longitude + ", latitude: " + latitude+ ", country: " + country + ", state: " + state ;
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -30,8 +31,8 @@ public class SolarWatchController {
 
     @GetMapping("/getBy")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<CityReport> getCurrent(@RequestParam LocalDate date, @RequestParam String city) {
-        CityReport result = solarWatchService.getCityReport(city, date);
+    public ResponseEntity<List<CityReport>> getCurrent(@RequestParam LocalDate date, @RequestParam String city) {
+        List<CityReport> result = solarWatchService.getCityReport(city, date);
         return ResponseEntity.ok(result);
     }
 

@@ -11,12 +11,14 @@ body {
 }
 
 .content {
-  margin: auto;
-  margin-top: 10%;
-  width: 50%;
+  margin: 10% auto auto;
+  width: 70%;
   background-color: white;
   padding: 2em;
   border-radius: 2em;
+}
+.nav {
+  background-color: white;
 }
 
 code {

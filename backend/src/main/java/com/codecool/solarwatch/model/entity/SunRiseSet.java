@@ -17,17 +17,14 @@ public class SunRiseSet {
     private String sunset;
     @Getter
     private LocalDate date;
-    @Getter
-    private String cityName;
 
     @ManyToOne
     private City city;
 
-    public SunRiseSet(String sunrise, String sunset, LocalDate date, String cityName, City city) {
+    public SunRiseSet(String sunrise, String sunset, LocalDate date, City city) {
         this.sunrise = sunrise;
         this.sunset = sunset;
         this.date = date;
-        this.cityName = cityName;
         this.city = city;
     }
 
@@ -36,6 +33,7 @@ public class SunRiseSet {
     }
 
     public CityReport getReport() {
-      return new CityReport(this.getSunrise(), this.getSunset(), this.getDate(), this.getCityName());
+      return new CityReport(this.getSunrise(), this.getSunset(), this.getDate(),
+              this.city.getName(),this.city.getCountry(), this.city.getState());
     }
 }

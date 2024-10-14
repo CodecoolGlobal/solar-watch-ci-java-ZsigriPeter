@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -36,17 +37,21 @@ class SolarWatchControllerTest {
     void getCurrentCorrectInput() {
         LocalDate date = LocalDate.of(2020, 1, 1);
         String city = "Budapest";
+        String state = "HU";
+        String country = "Hungary";
 
-        when(solarWatchServiceMock.getCityReport(city, date)).thenReturn(new CityReport(
+        when(solarWatchServiceMock.getCityReport(city, date)).thenReturn(Collections.singletonList(new CityReport(
                 "5:58:31 AM",
                 "6:08:07 PM",
                 date,
-                city
-        ));
+                city,
+                state,
+                country
+        )));
 
         String result = String.valueOf(solarWatchController.getCurrent(date, city));
 
-        String expectedString = "<200 OK OK,CityReport[sunrise=5:58:31 AM, sunset=6:08:07 PM, date=2020-01-01, city=Budapest],[]>";
+        String expectedString = "<200 OK OK,[CityReport[sunrise=5:58:31 AM, sunset=6:08:07 PM, date=2020-01-01, city=Budapest, country=HU, state=Hungary]],[]>";
 
         assertEquals(expectedString, result);
     }
@@ -54,11 +59,9 @@ class SolarWatchControllerTest {
     @Test
     void getCurrentJustDate() {
         LocalDate date = LocalDate.of(2020, 1, 1);
-        //String city = "Budapest";
 
         when(solarWatchServiceMock.getCityReport(null, date)).thenThrow(new IllegalArgumentException(""));
 
-        //String expectedString = "<200 OK OK,CityReport[sunrise=5:58:31 AM, sunset=6:08:07 PM, date=2020-01-01, city=Budapest],[]>";
 
         assertThrows(IllegalArgumentException.class, () -> solarWatchController.getCurrent(date, null));
 

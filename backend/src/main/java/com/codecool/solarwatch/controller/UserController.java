@@ -41,7 +41,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<Void> createUser(@RequestBody UserRequest signUpRequest) {
-        if(userRepository.findByUsername(signUpRequest.getUsername()).isPresent()) {
+        if(userRepository.findByUsername(signUpRequest.getUsername()).isEmpty()) {
         UserEntity user = new UserEntity(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()),
                 Set.of(roleRepository.findRoleByName("ROLE_USER").get()));
         userRepository.save(user);
