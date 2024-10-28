@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 public class SolarWatchService {
 
     @Value("${codecool.app.api.key}")
-    private static final String API_KEY = "937163359d1cdc16980dea3b0bf2b93e";
+    private String API_KEY;
 
     private final CityRepository cityRepository;
     private final SunsetRepository sunsetRepository;

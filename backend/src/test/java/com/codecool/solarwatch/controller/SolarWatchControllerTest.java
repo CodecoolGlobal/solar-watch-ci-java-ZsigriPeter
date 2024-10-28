@@ -47,7 +47,7 @@ class SolarWatchControllerTest {
 
         String result = String.valueOf(solarWatchController.getCurrent(date, city));
 
-        String expectedString = "<200 OK OK,[CityReport[sunrise=5:58:31 AM, sunset=6:08:07 PM, date=2020-01-01, city=Budapest, country=HU, state=Hungary]],[]>";
+        String expectedString = "[CityReport[sunrise=5:58:31 AM, sunset=6:08:07 PM, date=2020-01-01, city=Budapest, country=HU, state=Hungary]]";
 
         assertEquals(expectedString, result);
     }
