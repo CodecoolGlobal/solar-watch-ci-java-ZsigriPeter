@@ -18,7 +18,6 @@ function NavBar() {
     useEffect(() => {
         fetchUserContext().then(resp => {
             setUser(resp);
-            console.log(resp);
         }).catch(err => {
             console.log('Error fetching user context:', err);
         });

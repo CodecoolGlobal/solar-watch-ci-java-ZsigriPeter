@@ -16,7 +16,4 @@ public class Role {
     private Set<UserEntity> users;
 
     public Role() {}
-    public Role(String name) {
-        this.name = name;
-    }
 }

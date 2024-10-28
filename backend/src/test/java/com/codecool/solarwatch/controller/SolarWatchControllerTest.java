@@ -21,16 +21,12 @@ class SolarWatchControllerTest {
     public SolarWatchController solarWatchController;
 
     @Mock
-    public PasswordEncoder passwordEncoder;
-    @Mock
-    public AuthenticationManager authenticationManager;
-    @Mock
     public SolarWatchService solarWatchServiceMock;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        solarWatchController = new SolarWatchController(solarWatchServiceMock, passwordEncoder, authenticationManager);
+        solarWatchController = new SolarWatchController(solarWatchServiceMock);
     }
 
     @Test

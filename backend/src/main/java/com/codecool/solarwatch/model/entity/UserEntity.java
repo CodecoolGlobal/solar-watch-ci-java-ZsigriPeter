@@ -6,16 +6,13 @@ import lombok.Getter;
 import java.util.Set;
 
 @Entity
+@Getter
 public class UserEntity {
-
     @Id
     @GeneratedValue
     private long id;
-    @Getter
     private String username;
-    @Getter
     private String password;
-    @Getter
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",

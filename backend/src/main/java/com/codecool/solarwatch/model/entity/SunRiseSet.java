@@ -7,15 +7,13 @@ import lombok.Getter;
 import java.time.LocalDate;
 
 @Entity
+@Getter
 public class SunRiseSet {
     @Id
     @GeneratedValue
     private long id;
-    @Getter
     private String sunrise;
-    @Getter
     private String sunset;
-    @Getter
     private LocalDate date;
 
     @ManyToOne

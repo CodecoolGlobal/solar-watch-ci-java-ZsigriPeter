@@ -28,7 +28,6 @@ function LoginPage() {
         try {
             const result = await postLoginUser(userData);
             const data = await result.json();
-            console.log(data);
             localStorage.setItem("jwt", data.jwt);
             localStorage.setItem("role", data.roles[0]);
             localStorage.setItem("username", data.userName);

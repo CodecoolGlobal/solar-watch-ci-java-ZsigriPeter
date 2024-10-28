@@ -26,14 +26,28 @@ In Solar Watch users can select a date and a city and they get sunrise and sunse
 Ensure the following are installed on your computer:
 - Java 17
 - Maven 3.9+
-- Docker
+- Docker (for Dockerised usage)
 - PostgreSQL
 - Node.js and npm (for the frontend)
 
 ### Installation
 To set up the project locally:
+- clone to local machine
+- Docker:
+ - navigate to root directory
+ - `compose up`
+ - Open http://localhost:3000 in browser
+- Without Docker:
+ - navigate to root directory
+ - `cd backend`
+ - `mvn clean package -DskipTests`
+ - `java -jar target/solar-watch-0.0.1-SNAPSHOT.jar`
+ - open new cmd
+ - navigate to root directory
+ - `cd frontend`
+ - `npm start`
+ - open link in browser
 
-[//]: # (TODO - Check correctness of text below)
 ## How to use?  
 - Register a new user: select the "Sign Up" tab and fill the required fields, then click Sign Up.
 - Then Go to "Sign In", use the username / password combination given by you in the previous step

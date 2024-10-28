@@ -8,6 +8,7 @@ import com.codecool.solarwatch.model.report.SunsetReport;
 import com.codecool.solarwatch.repository.CityRepository;
 import com.codecool.solarwatch.repository.SunsetRepository;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -23,6 +24,7 @@ import org.slf4j.Logger;
 @Service
 public class SolarWatchService {
 
+    @Value("${codecool.app.api.key}")
     private static final String API_KEY = "937163359d1cdc16980dea3b0bf2b93e";
 
     private final CityRepository cityRepository;
@@ -108,13 +110,13 @@ public class SolarWatchService {
         return cityReportList.stream().map(SunRiseSet::getReport).toList();
     }
 
-    public CityReport deleteCityReportById(long cityId) {
+    public long deleteCityReportById(long cityId) {
         if (sunsetRepository.findById(cityId).isEmpty()) {
-            return null;
+            return -1;
         }
-        SunRiseSet sunRiseSet = sunsetRepository.findById(cityId).get();
+        long sunRiseSet = sunsetRepository.findById(cityId).get().getId();
         sunsetRepository.deleteById(cityId);
-        return sunRiseSet.getReport();
+        return sunRiseSet;
     }
 
 }

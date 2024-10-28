@@ -1,0 +1,39 @@
+services:
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: db_solarwatch
+    environment:
+      - POSTGRES_DB=solar-watch
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+
+  backend:
+    image: 'solar-watch-backend:latest'
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: solar-watch-backend
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/solar-watch
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - JWT_SECRET=${JWT_SECRET}
+      - SPRING_SQL_INIT_MODE=always
+      - SPRING_JPA_DEFER_DATASOURCE_INITIALIZATION=true
+
+  frontend:
+    image: 'solar-watch-frontend:latest'
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: solar-watch-frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    environment:
+      - BACKEND_HOST=backend
+

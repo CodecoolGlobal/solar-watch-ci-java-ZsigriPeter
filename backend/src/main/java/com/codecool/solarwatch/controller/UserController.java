@@ -6,7 +6,6 @@ import com.codecool.solarwatch.model.report.UserRequest;
 import com.codecool.solarwatch.repository.RoleRepository;
 import com.codecool.solarwatch.repository.UserRepository;
 import com.codecool.solarwatch.security.jwt.JwtUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,18 +39,16 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Void> createUser(@RequestBody UserRequest signUpRequest) {
+    public void createUser(@RequestBody UserRequest signUpRequest) {
         if(userRepository.findByUsername(signUpRequest.getUsername()).isEmpty()) {
         UserEntity user = new UserEntity(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()),
                 Set.of(roleRepository.findRoleByName("ROLE_USER").get()));
         userRepository.save(user);
-        return ResponseEntity.status(HttpStatus.OK).build();
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@RequestBody UserRequest loginRequest) {
+    public JwtResponse authenticateUser(@RequestBody UserRequest loginRequest) {
 
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -63,8 +60,7 @@ public class UserController {
         List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .toList();
 
-        return ResponseEntity
-                .ok(new JwtResponse(jwt, userDetails.getUsername(), roles));
+        return new  JwtResponse(jwt, userDetails.getUsername(), roles);
     }
 
     @GetMapping("/me")
