@@ -6,7 +6,6 @@ import com.codecool.solarwatch.model.report.UserRequest;
 import com.codecool.solarwatch.repository.RoleRepository;
 import com.codecool.solarwatch.repository.UserRepository;
 import com.codecool.solarwatch.security.jwt.JwtUtils;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -77,7 +76,7 @@ public class UserController {
     }
 
     @GetMapping("/context")
-    public ResponseEntity<?> displayUserContext() {
-        return ResponseEntity.ok(SecurityContextHolder.getContext().getAuthentication());
+    public Authentication displayUserContext() {
+        return SecurityContextHolder.getContext().getAuthentication();
     }
 }
