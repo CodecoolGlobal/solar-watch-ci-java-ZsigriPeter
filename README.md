@@ -34,19 +34,19 @@ Ensure the following are installed on your computer:
 To set up the project locally:
 - clone to local machine
 - Docker:
- - navigate to root directory
- - `compose up`
- - Open http://localhost:3000 in browser
+  - navigate to root directory
+  - `compose up`
+  - Open http://localhost:3000 in browser
 - Without Docker:
- - navigate to root directory
- - `cd backend`
- - `mvn clean package -DskipTests`
- - `java -jar target/solar-watch-0.0.1-SNAPSHOT.jar`
- - open new cmd
- - navigate to root directory
- - `cd frontend`
- - `npm start`
- - open link in browser
+  - navigate to root directory
+  - `cd backend`
+  - `mvn clean package -DskipTests`
+  - `java -jar target/solar-watch-0.0.1-SNAPSHOT.jar`
+  - open new cmd
+  - navigate to root directory
+  - `cd frontend`
+  - `npm start`
+  - open link in browser
 
 ## How to use?  
 - Register a new user: select the "Sign Up" tab and fill the required fields, then click Sign Up.
