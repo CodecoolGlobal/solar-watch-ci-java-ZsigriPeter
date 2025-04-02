@@ -64,3 +64,30 @@ To set up the project locally:
 
 ![srcs3.jpg](screenshots/srcs3.JPG)
 
+
+[Postgres]: https://img.shields.io/badge/Postgres-%23316192.svg?logo=postgresql&logoColor=white
+[Postgres-url]: https://www.postgresql.org/
+
+[React]: https://img.shields.io/badge/React-%2320232a.svg?logo=react&logoColor=%2361DAFB
+[React-url]: https://react.dev/
+
+[Spring-Boot]: https://img.shields.io/badge/Spring%20Boot-6DB33F?logo=springboot&logoColor=fff
+[Spring-Boot-url]: https://spring.io/projects/spring-boot
+
+[Vite]: https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=fff
+[Vite-url]: https://vite.dev/guide/
+
+[IntelliJ-IDEA]: https://img.shields.io/badge/IntelliJIDEA-000000.svg?logo=intellij-idea&logoColor=white
+[IntelliJ-IDEA-url]: https://www.jetbrains.com/idea/
+
+[CSS]: https://img.shields.io/badge/CSS-1572B6?logo=css3&logoColor=fff
+[CSS-url]: https://en.wikipedia.org/wiki/CSS
+
+[JavaScript]: https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=000
+[JavaScript-url]: https://en.wikipedia.org/wiki/JavaScript
+
+[Java]: https://img.shields.io/badge/Java-%23ED8B00.svg?logo=openjdk&logoColor=white
+[Java-url]: https://www.java.com/en/
+
+[Git]: https://img.shields.io/badge/Git-F05032?logo=git&logoColor=fff
+[Git-url]: https://git-scm.com/
