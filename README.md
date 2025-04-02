@@ -13,9 +13,11 @@ In Solar Watch users can select a date and a city and they get sunrise and sunse
 - Get data with user input
 
 ## Technologies
-- Frontend: MyReactApp, Vanilla CSS
-- Backend: Spring Boot with Spring Data JPA and Spring Security
-- Database: PostgreSQL
+- [![React]][React-url] [![Vite]][Vite-url] [![JavaScript]][JavaScript-url]
+- [![CSS]][CSS-url]
+- [![Spring-Boot]][Spring-Boot-url] [![Java]][Java-url]
+- [![Postgres]][Postgres-url]
+- [![IntelliJ-IDEA]][IntelliJ-IDEA-url]
 
 ## Developers
 - [Péter Zsigri](https://github.com/ZsigriPeter)
